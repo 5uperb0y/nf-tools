@@ -1,4 +1,5 @@
 #!/bin/bash
+NF_COMPLETE_SHORTCUT="\C-n"
 extract_available_options () {
 	awk '
 		/"""/ { inDoc = !inDoc; next}
@@ -29,5 +30,4 @@ _nf_complete(){
 		append_to_cmd "${selected_option}"
 	fi
 }
-
-bind -x '"\C-n":_nf_complete'
+bind -x '"'"${NF_COMPLETE_SHORTCUT}"'":"_nf_complete"'
