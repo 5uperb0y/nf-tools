@@ -1,5 +1,6 @@
 #!/bin/bash
 NF_COMPLETE_SHORTCUT="\C-n"
+NF_COMPLETE_WORKFLOW=$HOME/.workflows
 extract_available_options () {
 	awk '
 		/"""/ { inDoc = !inDoc; next}
@@ -28,6 +29,13 @@ _nf_complete(){
 			awk -F " " '{print $1}'
 			)
 		append_to_cmd "${selected_option}"
+	elif [[ "${words[0]}" == "nextflow" && "${words[1]}" == "run" ]]; then
+		local selected_workflow=$(
+			cat "${NF_COMPLETE_WORKFLOW}" |\
+			fzf --height 20% --reverse --header="${cmd}" |\
+			awk -F " " '{print $2}'
+			)
+		append_to_cmd "${selected_workflow}"
 	fi
 }
 bind -x '"'"${NF_COMPLETE_SHORTCUT}"'":"_nf_complete"'
